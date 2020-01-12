@@ -6,7 +6,7 @@ def get_urls(url):
     all_found=soup.find_all('a', class_='product-title')
     hrefs = []
     for a in range(len(all_found)):
-        hrefs.append(f'https://bol.com/{all_found[a]["href"]}')
+        hrefs.append(f'https://<vendor>.com/{all_found[a]["href"]}')
     return hrefs
-urls = get_urls('https://www.bol.com/nl/s/algemeen/zoekresultaten/Ntt/tandenborstel/N/0/Nty/1/search/true/searchType/qck/suggestedFor/tand/originalSearchContext/media_all/originalSection/main/defaultSearchContext/media_all/sc/media_all/index.html')
+urls = get_urls('<searchurl>')
 print(urls)
