@@ -21,6 +21,7 @@ import os,sys
 import time
 from fetch_product_list import get_urls
 import csv
+import lxml
 
 splunkhome = os.environ['SPLUNK_HOME']
 sys.path.append(os.path.join(splunkhome, 'etc', 'apps', 'searchcommands_app', 'lib'))
@@ -33,35 +34,17 @@ class generate_product_list(GeneratingCommand):
 
     url = Option(require=True)
     vendor = Option(require=True)
+    print(type(url))
 
     def generate(self):
-        self.logger.debug("Generating %s events" % self.locations)
-        n = 1
-        for i in self.locations:
-            Location = location(i, TomTomKey)
-            CurrentWeather = currentweather(Location, WeatherKey)
-            Lon = "longitude=\"" + str(Location.LocationLon) + "\" "
-            Lat = "lattitude=\"" + str(Location.LocationLat) + "\" "
-            Address = "address=\"" + str(Location.Address) + "\" "
-            Temp = "temperature=\"" + str(CurrentWeather.Temperature) + "\""
-            Clouds = "clouds=\"" + str(CurrentWeather.Cloudiness) + "\""
-            Rain = "rain=\"" + str(CurrentWeather.Rainfall) + "\""
-            text = Lon + Lat + Address + Temp + Clouds + Rain
+        self.logger.debug("Generating %s events" % self.url)
+        urls = get_urls(self.url, self.vendor)
+        n = 0
+        for i in urls:
+            product_name = i[0]
+            product_url = i[1]
+            text = f'product_name={product_name}, product_url={product_url}'
             yield {'_time': time.time(), 'event_no': n, '_raw': text}
-            n += 1
+            n += 1 
 
 dispatch(generate_product_list, sys.argv, sys.stdin, sys.stdout, __name__)
-
-
-
-
-
-
-
-url = input('what is the search url?')
-vendor = input('who is the vendor?')
-
-urls = get_urls(url, vendor)
-with open("products_list.csv", "w") as f:
-    writer = csv.writer(f)
-    writer.writerows(urls)

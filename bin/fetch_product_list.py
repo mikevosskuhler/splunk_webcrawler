@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 def get_urls(url, vendor):
     r = requests.get(url)
-    soup = BeautifulSoup(r.text, 'lxml')
+    soup = BeautifulSoup(r.text, 'html.parser')
     all_found=soup.find_all('a', class_='product-title')
     hrefs = []
     for a in range(len(all_found)):
