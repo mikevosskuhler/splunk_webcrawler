@@ -3,8 +3,9 @@ from bs4 import BeautifulSoup
 def get_urls(url, vendor):
     r = requests.get(url)
     soup = BeautifulSoup(r.text, 'html.parser')
-    all_found=soup.find_all('a', class_='product-title')
+    product_title = soup.find_all('a', class_='product-title')
+    product_price = soup.find_all('meta', itemprop='price')
     hrefs = []
-    for a in range(len(all_found)):
-        hrefs.append([all_found[a].contents, f'https://{vendor}/{all_found[a]["href"]}'])
+    for a in range(len(product_title)):
+        hrefs.append([product_title[a].contents, f'https://{vendor}/{product_title[a]["href"]}', product_price[a]["content"]])
     return hrefs

@@ -43,7 +43,8 @@ class generate_product_list(GeneratingCommand):
         for i in urls:
             product_name = i[0]
             product_url = i[1]
-            text = f'product_name={product_name}, product_url={product_url}'
+            product_price = i[2]
+            text = f'product_name={product_name}, product_url={product_url}, product_price={product_price}'
             yield {'_time': time.time(), 'event_no': n, '_raw': text}
             n += 1 
 
