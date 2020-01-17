@@ -1,0 +1,61 @@
+<form theme="dark">
+  <label>Generate Product List</label>
+  <description>Enter you search page and vendor URL and click on submit</description>
+  <search id="base">
+    <query>
+      | productlist url=$url$ vendor=$vendor$ 
+| extract 
+| fields - _time 
+| table *
+    </query>
+  </search>
+  <fieldset submitButton="true" autoRun="false">
+    <input type="text" token="url">
+      <label>Search Page URL</label>
+    </input>
+    <input type="text" token="vendor">
+      <label>Vendor URL</label>
+    </input>
+    <input type="multiselect" token="filter">
+      <label>exclude products:</label>
+      <delimiter>, </delimiter>
+      <fieldForLabel>product_name</fieldForLabel>
+      <fieldForValue>product_name</fieldForValue>
+      <search base="base"></search>
+      <prefix>(</prefix>
+      <suffix>)</suffix>
+      <choice value="-">NONE</choice>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <default>-</default>
+    </input>
+    <input type="text" token="lookup">
+      <label>List Name (should end with .csv)</label>
+      <initialValue>test_list.csv</initialValue>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Products</title>
+      <table>
+        <title>Click to row to open the product page</title>
+        <search base="base">
+          <query>| search NOT product_name IN $filter$ 
+| outputlookup $lookup$ 
+| fields - _raw</query>
+        </search>
+        <option name="count">50</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+        <drilldown>
+          <link target="_blank">$row.product_url%7Cn$</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+</form>

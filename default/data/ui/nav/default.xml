@@ -1,0 +1,3 @@
+<nav search_view="search">
+  <view name="generate_product_list" default='true' />
+</nav>
