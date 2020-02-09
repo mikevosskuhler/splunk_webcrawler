@@ -1,0 +1,18 @@
+[app/ui]
+owner = admin
+version = 8.0.1
+modtime = 1579207954.068915000
+
+[app/launcher]
+owner = admin
+version = 8.0.1
+modtime = 1579207954.071895000
+
+[app/package/check_for_updates]
+version = 8.0.1
+modtime = 1579207954.072973000
+
+[views/generate_product_list]
+owner = admin
+version = 8.0.1
+modtime = 1581207314.483817000
